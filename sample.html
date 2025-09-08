@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundSafe 事業企画書 - 株式会社アニモ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony (Off-white, Dark Slate, Soft Teal) -->
+    <!-- Application Structure Plan: The application is structured as a single-page scrolling narrative with a fixed top navigation. This design was chosen to guide the user (e.g., an investor or taxi company executive) through a logical story: identifying the problem, presenting our unique solution, detailing the business model, and showing future potential. This is more engaging and digestible than a static document. Key interactions include a hover-enabled chart to quantify the problem, making data exploration intuitive. -->
+    <!-- Visualization & Content Choices: 1. Problem (Driver Impact): Goal=Empathize. Viz=Bar Chart. Interaction=Tooltips on hover. Justification=Quantifies the severity of harassment impact quickly. Library=Chart.js (Canvas). 2. Solution (How it Works): Goal=Explain. Viz=HTML/CSS process flow diagram. Interaction=None, static visual. Justification=Clearly illustrates the service steps without library overhead. Method=Tailwind CSS. 3. Business Model: Goal=Inform. Viz=Side-by-side pricing cards. Interaction=None, static comparison. Justification=Clear, standard way to present subscription tiers. Method=Tailwind CSS. 4. Roadmap: Goal=Show Future. Viz=HTML/CSS timeline. Interaction=None, static visual. Justification=Standard, intuitive way to present future plans. Method=HTML/CSS. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #F8F7F4;
+            color: #334155;
+        }
+        .nav-link {
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #14B8A6;
+            border-bottom-color: #14B8A6;
+        }
+        .section-card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <div class="text-xl font-bold text-slate-700">
+                    <span class="text-teal-500">SoundSafe</span> by Animo
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#vision" class="nav-link font-medium pb-1">01. VISION</a>
+                    <a href="#problem" class="nav-link font-medium pb-1">02. 課題</a>
+                    <a href="#solution" class="nav-link font-medium pb-1">03. 解決策</a>
+                    <a href="#gemini-features" class="nav-link font-medium pb-1">04. デモ</a>
+                    <a href="#business" class="nav-link font-medium pb-1">05. 事業計画</a>
+                    <a href="#roadmap" class="nav-link font-medium pb-1">06. 展望</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="pt-24">
+        
+        <section id="vision" class="min-h-[80vh] flex items-center">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-slate-800 leading-tight">
+                    ドライバーの<span class="text-teal-500">安心</span>を守る、<br>AIコンシェルジュ。
+                </h1>
+                <p class="mt-6 text-lg text-slate-600 max-w-3xl mx-auto">
+                    株式会社アニモの音響分析技術が可能にする、タクシー業界の新たな安全基準。それが「SoundSafe」です。私たちは、ドライバーが直面するカスタマーハラスメントの問題を解決し、誰もが安心して乗車できる環境を創造します。
+                </p>
+                <div class="mt-10">
+                    <a href="#problem" class="bg-teal-500 text-white font-bold py-3 px-8 rounded-full hover:bg-teal-600 transition-colors">
+                        企画詳細を見る
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="problem" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-800">02. 課題：見過ごされてきたドライバーの叫び</h2>
+                    <p class="mt-4 text-slate-600 max-w-2xl mx-auto">
+                        タクシードライバーが日常的に直面するカスタマーハラスメント（カスハラ）は、彼らの心身に深刻な影響を及ぼしています。これは単なる接客問題ではなく、交通インフラ全体の安全を脅かす重大な社会課題です。
+                    </p>
+                </div>
+
+                <div class="section-card p-6 md:p-8">
+                    <h3 class="text-xl font-bold text-center mb-6">カスハラがドライバーに与える影響</h3>
+                     <p class="text-center text-slate-500 mb-6 -mt-4 text-sm">調査結果によると、ハラスメントを経験したドライバーの多くが深刻な精神的負担を感じています。</p>
+                    <div class="chart-container">
+                        <canvas id="driverImpactChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solution" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-800">03. 解決策：SoundSafeが提供する新常識</h2>
+                    <p class="mt-4 text-slate-600 max-w-2xl mx-auto">
+                        SoundSafeは、当社のコア技術である音響分析を活用し、ハラスメントの兆候をリアルタイムで検知。AIが介入することで、ドライバーに代わって状況を鎮静化させ、安全な運行を守ります。
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="section-card p-8">
+                        <h3 class="text-xl font-bold mb-4">サービスの仕組み</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <div class="bg-teal-100 text-teal-600 font-bold rounded-full w-10 h-10 flex items-center justify-center mr-4">1</div>
+                                <p class="text-slate-700"><strong>リアルタイム音声解析：</strong>車内の会話を常時モニタリングし、不適切な発言や声のトーンをAIが解析。</p>
+                            </div>
+                            <div class="h-8 w-px bg-slate-300 ml-5"></div>
+                            <div class="flex items-center">
+                                <div class="bg-teal-100 text-teal-600 font-bold rounded-full w-10 h-10 flex items-center justify-center mr-4">2</div>
+                                <p class="text-slate-700"><strong>カスハラ兆候検知：</strong>独自のアルゴリズムでハラスメントの可能性を判断。</p>
+                            </div>
+                            <div class="h-8 w-px bg-slate-300 ml-5"></div>
+                            <div class="flex items-center">
+                                <div class="bg-teal-100 text-teal-600 font-bold rounded-full w-10 h-10 flex items-center justify-center mr-4">3</div>
+                                <p class="text-slate-700"><strong>AIコンシェルジュ介入：</strong>モニターからAIが冷静かつ毅然とした態度で乗客に対応し、状況を鎮静化。</p>
+                            </div>
+                             <div class="h-8 w-px bg-slate-300 ml-5"></div>
+                             <div class="flex items-center">
+                                <div class="bg-teal-100 text-teal-600 font-bold rounded-full w-10 h-10 flex items-center justify-center mr-4">4</div>
+                                <p class="text-slate-700"><strong>記録と報告：</strong>事象を自動で記録し、会社へレポート。証拠保全と再発防止に貢献。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 gap-6">
+                        <div class="section-card p-6">
+                             <div class="text-teal-500 mb-2">🛡️</div>
+                            <h4 class="font-bold text-lg mb-2">心理的安心感の提供</h4>
+                            <p class="text-slate-600">万が一の際もAIが守ってくれるという安心感が、ドライバーの精神的負担を大幅に軽減します。</p>
+                        </div>
+                        <div class="section-card p-6">
+                            <div class="text-teal-500 mb-2">🚗</div>
+                            <h4 class="font-bold text-lg mb-2">安全運転への集中</h4>
+                            <p class="text-slate-600">不要な口論やストレスから解放され、ドライバーは最も重要な「運転」に集中できます。</p>
+                        </div>
+                        <div class="section-card p-6">
+                            <div class="text-teal-500 mb-2">📊</div>
+                            <h4 class="font-bold text-lg mb-2">客観的な証拠確保</h4>
+                            <p class="text-slate-600">音声とAIの対応履歴が記録されるため、トラブル発生時の客観的な証拠として活用可能です。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="gemini-features" class="py-20 bg-white">
+             <div class="container mx-auto px-6">
+                 <div class="text-center mb-12">
+                     <h2 class="text-3xl font-bold text-slate-800">04. デモンストレーション</h2>
+                     <p class="mt-4 text-slate-600 max-w-2xl mx-auto">
+                         Gemini APIを活用して、SoundSafeの中核機能を体験してみましょう。
+                     </p>
+                 </div>
+
+                 <div class="grid md:grid-cols-2 gap-8">
+                     <div class="section-card p-6">
+                         <h3 class="text-xl font-bold mb-4">✨ 会話シミュレーション</h3>
+                         <p class="text-slate-600 mb-4">ボタンをクリックすると、AIコンシェルジュがトラブルを鎮静化する会話例を生成します。</p>
+                         <button id="simulateButton" class="w-full bg-teal-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-teal-600 transition-colors">
+                             会話をシミュレートする ✨
+                         </button>
+                         <div id="simulationResult" class="mt-6 p-4 bg-slate-100 rounded-lg text-slate-700 whitespace-pre-wrap">
+                             ここにAIコンシェルジュによる会話例が表示されます。
+                         </div>
+                     </div>
+                     <div class="section-card p-6">
+                         <h3 class="text-xl font-bold mb-4">✨ 企画書要約</h3>
+                         <p class="text-slate-600 mb-4">企画書の各セクションをAIが要約します。報告書作成の手間を軽減するイメージです。</p>
+                         <div class="flex items-center gap-4">
+                             <select id="summarySelector" class="flex-grow p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+                                 <option value="vision">01. VISION</option>
+                                 <option value="problem">02. 課題</option>
+                                 <option value="solution">03. 解決策</option>
+                                 <option value="business">05. 事業計画</option>
+                                 <option value="roadmap">06. 展望</option>
+                             </select>
+                             <button id="summarizeButton" class="shrink-0 bg-teal-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-teal-600 transition-colors">
+                                 要約する ✨
+                             </button>
+                         </div>
+                         <div id="summaryResult" class="mt-6 p-4 bg-slate-100 rounded-lg text-slate-700 whitespace-pre-wrap">
+                             ここに要約が表示されます。
+                         </div>
+                     </div>
+                 </div>
+             </div>
+        </section>
+
+        <section id="business" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-800">05. 事業計画</h2>
+                    <p class="mt-4 text-slate-600 max-w-2xl mx-auto">
+                        SoundSafeは、持続可能なSaaSモデルを基盤とし、タクシー業界全体の価値向上に貢献します。専門技術を活かした明確な競合優位性が、本事業の成功を支えます。
+                    </p>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="section-card p-8 col-span-1 md:col-span-1">
+                        <h3 class="text-xl font-bold mb-4">ターゲット市場</h3>
+                        <p class="text-slate-600">全国のタクシー会社、特にドライバーの定着率向上や労働環境改善に意欲的な企業を主要ターゲットとします。個人タクシー事業者にも展開可能です。</p>
+                    </div>
+                     <div class="section-card p-8 col-span-1 md:col-span-2">
+                        <h3 class="text-xl font-bold mb-4">競合優位性</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-slate-600">
+                           <p><strong class="text-slate-700">・高度な音響分析技術:</strong> 長年培った専門性による高精度な検知能力。</p>
+                           <p><strong class="text-slate-700">・能動的なAI介入:</strong> 「記録」に留まらず「対応」まで行う唯一のサービス。</p>
+                           <p><strong class="text-slate-700">・データ活用による価値創出:</strong> 傾向分析から再発防止策までを支援。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-12">
+                     <h3 class="text-xl font-bold text-center mb-6">ビジネスモデル：SaaSサブスクリプション</h3>
+                     <div class="flex flex-col md:flex-row justify-center gap-8">
+                        <div class="section-card p-8 border-2 border-slate-200 w-full md:w-1/3">
+                            <h4 class="font-bold text-lg text-center">基本プラン</h4>
+                            <p class="text-center text-3xl font-bold my-4">¥3,000<span class="text-base font-normal text-slate-500"> /台・月</span></p>
+                            <ul class="space-y-2 text-slate-600">
+                                <li>✓ リアルタイム音声解析</li>
+                                <li>✓ AIコンシェルジュ自動対応</li>
+                                <li>✓ 事後レポート（月次）</li>
+                                <li class="text-slate-400">✗ 緊急通報支援</li>
+                            </ul>
+                        </div>
+                        <div class="section-card p-8 border-2 border-teal-500 relative w-full md:w-1/3">
+                            <div class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-teal-500 text-white text-xs font-bold px-3 py-1 rounded-full">推奨</div>
+                            <h4 class="font-bold text-lg text-center text-teal-600">プレミアムプラン</h4>
+                            <p class="text-center text-3xl font-bold my-4">¥5,000<span class="text-base font-normal text-slate-500"> /台・月</span></p>
+                            <ul class="space-y-2 text-slate-600">
+                                <li>✓ リアルタイム音声解析</li>
+                                <li>✓ AIコンシェルジュ自動対応</li>
+                                <li>✓ 事後レポート（随時）</li>
+                                <li>✓ 緊急通報支援連携</li>
+                            </ul>
+                        </div>
+                     </div>
+                      <p class="text-center text-sm text-slate-500 mt-4">※初期導入費用として、別途機器設置費用がかかります。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                 <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-800">06. 今後の展望</h2>
+                    <p class="mt-4 text-slate-600 max-w-2xl mx-auto">
+                        SoundSafeはタクシー業界での成功を基盤に、より広く社会の「安全・安心」に貢献するプラットフォームへと進化していきます。
+                    </p>
+                </div>
+
+                <div class="relative w-full max-w-4xl mx-auto">
+                    <div class="absolute left-1/2 h-full w-0.5 bg-slate-300 -translate-x-1/2"></div>
+                    
+                    <div class="relative mb-8">
+                         <div class="absolute left-1/2 -translate-x-1/2 w-4 h-4 bg-teal-500 rounded-full ring-4 ring-white"></div>
+                        <div class="w-full md:w-5/12 ml-auto p-4 section-card">
+                             <h4 class="font-bold text-lg">Phase 1: 市場導入</h4>
+                            <p class="text-sm text-slate-600">タクシー業界へのサービス提供を開始。導入実績を積み上げ、プロダクトの改善を継続。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="relative mb-8">
+                         <div class="absolute left-1/2 -translate-x-1/2 w-4 h-4 bg-teal-500 rounded-full ring-4 ring-white"></div>
+                        <div class="w-full md:w-5/12 mr-auto text-right p-4 section-card">
+                             <h4 class="font-bold text-lg">Phase 2: 機能拡張と連携</h4>
+                            <p class="text-sm text-slate-600">配車アプリや決済システムとのAPI連携を実現。利便性を向上させ、付加価値を創出。</p>
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <div class="absolute left-1/2 -translate-x-1/2 w-4 h-4 bg-teal-500 rounded-full ring-4 ring-white"></div>
+                        <div class="w-full md:w-5/12 ml-auto p-4 section-card">
+                             <h4 class="font-bold text-lg">Phase 3: 他業種への展開</h4>
+                            <p class="text-sm text-slate-600">バス、トラックなどの運輸業界や、介護、小売といったサービス業へ事業領域を拡大。</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="bg-slate-800 text-white py-8">
+        <div class="container mx-auto px-6 text-center text-slate-400">
+            <p>&copy; 2025 株式会社アニモ. All Rights Reserved.</p>
+            <p class="text-sm mt-2">これは新規事業の企画案です。</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chartCtx = document.getElementById('driverImpactChart').getContext('2d');
+            const driverImpactChart = new Chart(chartCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['強い精神的ストレスを感じた', '事故につながる不安を感じた', '離職を検討した'],
+                    datasets: [{
+                        label: 'ハラスメント経験ドライバーの割合 (%)',
+                        data: [85, 75, 60],
+                        backgroundColor: [
+                            'rgba(20, 184, 166, 0.6)',
+                            'rgba(245, 158, 11, 0.6)',
+                            'rgba(239, 68, 68, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(20, 184, 166, 1)',
+                            'rgba(245, 158, 11, 1)',
+                            'rgba(239, 68, 68, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        },
+                        title: {
+                            display: false,
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                             ticks: {
+                                callback: function(value) {
+                                    return value + '%'
+                                }
+                            }
+                        },
+                        y: {
+                           ticks: {
+                                font: {
+                                    size: 14
+                                }
+                           }
+                        }
+                    }
+                }
+            });
+
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.5
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+             
+             if (location.hash) {
+                const targetElement = document.querySelector(location.hash);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+
+            const simulateButton = document.getElementById('simulateButton');
+            const simulationResult = document.getElementById('simulationResult');
+            const summarizeButton = document.getElementById('summarizeButton');
+            const summarySelector = document.getElementById('summarySelector');
+            const summaryResult = document.getElementById('summaryResult');
+
+            simulateButton.addEventListener('click', async () => {
+                simulationResult.innerHTML = 'AIコンシェルジュが会話を生成中...';
+                const conversationPrompt = `タクシーの車内で、泥酔した乗客が運転手に対して「お前、運転下手だな！」と乱暴な口調で絡んできた時の会話を、以下のように役割別に作成してください。
+                1. 運転手：丁寧かつ冷静に乗客をなだめようとする。
+                2. 乗客：酔って不満を述べ、口調が乱暴になる。
+                3. AIコンシェルジュ：モニターから声が聞こえる設定で、冷静で中立的な立場で状況を鎮静化させようと発言する。
+                会話は以下の形式で書いてください：
+                「運転手」：「〜」
+                「乗客」：「〜」
+                「AIコンシェルジュ」：「〜」
+                `;
+                const payload = {
+                    contents: [{ parts: [{ text: conversationPrompt }] }],
+                    tools: [{ "google_search": {} }],
+                    systemInstruction: {
+                        parts: [{ text: "あなたはプロの会話ライターです。ユーザーの指示に従い、リアルで自然な会話を生成してください。" }]
+                    },
+                };
+                try {
+                    const apiKey = "";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                    let response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await response.json();
+                    const text = result.candidates[0].content.parts[0].text;
+                    simulationResult.innerText = text;
+                } catch (error) {
+                    simulationResult.innerText = '会話の生成に失敗しました。';
+                }
+            });
+
+            summarizeButton.addEventListener('click', async () => {
+                const sectionId = summarySelector.value;
+                const sectionText = document.getElementById(sectionId).innerText;
+                summaryResult.innerHTML = '要約を生成中...';
+                const summaryPrompt = `以下の文章を2〜3文で簡潔に要約してください。
+                文章:
+                ${sectionText}
+                `;
+                const payload = {
+                    contents: [{ parts: [{ text: summaryPrompt }] }],
+                    tools: [{ "google_search": {} }],
+                    systemInstruction: {
+                        parts: [{ text: "あなたはプロの要約ライターです。ユーザーの指示に従い、文章の要点を正確に捉えて簡潔に要約してください。" }]
+                    },
+                };
+                 try {
+                    const apiKey = "";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                    let response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await response.json();
+                    const text = result.candidates[0].content.parts[0].text;
+                    summaryResult.innerText = text;
+                } catch (error) {
+                    summaryResult.innerText = '要約の生成に失敗しました。';
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>
